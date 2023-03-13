@@ -47,7 +47,7 @@ void on_read(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf)
 		file_request = malloc(sizeof(file_request_t));
 		file_request->client = (uv_tcp_t *)client;
 		snprintf(file_request->path, 1024, "%s", ((parser_data_t *)parser->data)->url);
-		serve_file(file_request);
+		extract_http_request_path(file_request);
 	}
 
 	free(((parser_data_t *)parser->data)->url);
