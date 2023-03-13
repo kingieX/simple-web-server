@@ -10,8 +10,11 @@
 void on_read(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf)
 {
 	file_request_t *file_request;
-	http_parser_t *parser;
+	http_parser *parser;
 	size_t parsed;
+	http_parser_settings settings;
+	parser_data_t* data = malloc(sizeof(parser_data_t));
+	data->url = NULL;
 
 	if (nread < 0)
 	{
@@ -25,14 +28,16 @@ void on_read(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf)
 		return;
 	}
 
-	parser = (http_parser_t *)client->data;
+	parser = (http_parser *)client->data;
+	parser->data = data;
+	settings.on_url = on_url;
 	parsed = http_parser_execute(parser, &settings,
 		       		     buf->base, nread);
 
 	if (parsed != nread)
 	{
 		fprintf(stderr, "Error parsing HTTP request\n");
-		uv_close(client, on_close);
+		uv_close((uv_handle_t *)client, on_close);
 		free(buf->base);
 		return;
 	}
@@ -41,9 +46,26 @@ void on_read(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf)
 	{
 		file_request = malloc(sizeof(file_request_t));
 		file_request->client = (uv_tcp_t *)client;
-		snprintf(file_request->path, 1024, "%s", parser->path);
+		snprintf(file_request->path, 1024, "%s", ((parser_data_t *)parser->data)->url);
 		serve_file(file_request);
 	}
 
+	free(((parser_data_t *)parser->data)->url);
+	free(parser->data);
 	free(buf->base);
+
+}
+
+/**
+ * on_url - extracts request path and its length into struct
+ * @parser: the parser containing request
+ * @at: pointer to buffer containing path
+ * @length: size of the buffer
+ * return: 0 on success
+ */
+int on_url(http_parser* parser, const char* at, size_t length)
+{
+	((parser_data_t *)parser->data)->url = (char*)malloc(length + 1);
+	snprintf(((parser_data_t *)parser->data)->url, length + 1, "%s", at);
+	return 0;
 }

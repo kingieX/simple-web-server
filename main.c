@@ -1,4 +1,4 @@
-#include "server.h"
+#include "main.h"
 
 /**
  * main - fires up the server
@@ -14,7 +14,7 @@ int main(void)
 			  DEFAULT_BACKLOG, on_connect);
 	if (r)
 	{
-		printf(stderr, "Error listening: %s\n", uv_strerror(r));
+		fprintf(stderr, "Error listening: %s\n", uv_strerror(r));
 		return 1;
 	}
 

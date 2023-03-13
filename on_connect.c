@@ -1,4 +1,4 @@
-#include "server.h"
+#include "main.h"
 
 /**
  * on_connect - accepts tcp conncetion and reads into allocated buffer
