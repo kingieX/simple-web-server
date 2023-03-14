@@ -28,7 +28,7 @@ void on_read(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf)
 		return;
 	}
 
-	http_parser_init(parser, HTTP_REQUEST);
+	http_parser_init(parser, HTTP_BOTH);
 	parser->data = client;
 	http_parser_settings_init(&settings);
 	settings.on_url = on_url;
