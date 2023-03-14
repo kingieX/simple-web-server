@@ -9,6 +9,7 @@
 void on_connect(uv_stream_t *server, int status)
 {
 	uv_tcp_t *client;
+	parser_data_t *data;
 
 	if (status < 0)
 	{

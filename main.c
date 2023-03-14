@@ -17,7 +17,7 @@ int main(void)
 		fprintf(stderr, "Error listening: %s\n", uv_strerror(r));
 		return 1;
 	}
-	printf("Listening for connection...\n");
+	printf("Listening on port 8080...\n");
 
 	uv_run(loop, UV_RUN_DEFAULT);
 	
