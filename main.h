@@ -28,4 +28,8 @@ void on_close(uv_handle_t *handle);
 int on_url(http_parser* parser, const char* at, size_t length);
 void extract_http_request_path(file_request_t *file_req);
 char* read_file(file_request_t *file_req);
+void serve_file(file_request_t *file_req);
+void send_response(uv_tcp_t *client, int status_code, uv_buf_t *iov, int iov_count);
+void on_write_end(uv_write_t *write_req, int status);
+
 #endif
