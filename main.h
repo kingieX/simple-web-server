@@ -27,4 +27,5 @@ void alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf);
 void on_close(uv_handle_t *handle);
 int on_url(http_parser* parser, const char* at, size_t length);
 void extract_http_request_path(file_request_t *file_req);
+char* read_file(file_request_t *file_req);
 #endif
