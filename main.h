@@ -29,7 +29,9 @@ int on_url(http_parser* parser, const char* at, size_t length);
 void extract_http_request_path(file_request_t *file_req);
 char* read_file(file_request_t *file_req);
 void serve_file(file_request_t *file_req);
-void send_response(uv_tcp_t *client, int status_code, uv_buf_t *iov, int iov_count);
+void send_response(uv_tcp_t *client, int status_code, uv_buf_t *iov, int iov_count, const char *content_type);
 void on_write_end(uv_write_t *write_req, int status);
-
+char* read_file_path(char* file_name);
+long get_file_size(char* file_name);
+char* get_content_type(const char* path);
 #endif
