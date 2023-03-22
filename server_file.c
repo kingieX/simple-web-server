@@ -117,13 +117,13 @@ void send_response(uv_tcp_t *client, int status_code, uv_buf_t *iov, int iov_cou
     uv_buf_t header_buf = uv_buf_init(header, strlen(header));
     uv_write_t *write_req = (uv_write_t *)malloc(sizeof(uv_write_t));
 
-    uv_write(write_req, (uv_stream_t *)client, &header_buf, 1, on_write_end);
+    uv_write(write_req, (uv_stream_t *)client, &header_buf, 1, NULL);
 
     for (int i = 0; i < iov_count; i++)
     {
         uv_write_t *write_req2 = (uv_write_t *)malloc(sizeof(uv_write_t));
         uv_buf_t *iov_buf = &iov[i];
-        uv_write(write_req2, (uv_stream_t *)client, iov_buf, 1, on_write_end);
+        uv_write(write_req2, (uv_stream_t *)client, iov_buf, 1, NULL);
     }
 }
 
